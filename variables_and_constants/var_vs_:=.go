@@ -2,7 +2,7 @@ package main
 
 import "fmt"
 
-func main () {
+func vvc () {
 	var integerVariable int
 	var float64Variable float64
 	var stringVariable string
@@ -54,17 +54,17 @@ func problemFour() {
 }
 
 func problemFive() {
-	var int8Variable int8 = 10
-	var uint8Variable uint8 = 20
-	var int16Variable int16 = -300
-	var uint16Variable uint16 = 60000
+	// var int8Variable int8 = 10
+	// var uint8Variable uint8 = 20
+	// var int16Variable int16 = -300
+	// var uint16Variable uint16 = 60000
 
-	var name string = "Mar"
-	var isActive bool = true
-	var score float64 = 98.6
+	// var name string = "Mar"
+	// var isActive bool = true
+	// var score float64 = 98.6
 
-	counter := 0
-	message := "Hello, Go!"
-	flag := false
-	pi := 3.1415
+	// counter := 0
+	// message := "Hello, Go!"
+	// flag := false
+	// pi := 3.1415
 }
