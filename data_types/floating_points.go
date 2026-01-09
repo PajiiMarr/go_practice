@@ -2,7 +2,7 @@ package main
 
 import "fmt"
 
-func fp () {
+func fp() {
 	problem_one_fp()
 	problem_two_fp()
 	problem_three_fp()
@@ -10,7 +10,7 @@ func fp () {
 	problem_five_fp()
 }
 
-func problem_one_fp () {
+func problem_one_fp() {
 	var float32Var float32 = 3.14
 	var float64Var float64 = 3.14159265359
 
@@ -18,7 +18,7 @@ func problem_one_fp () {
 	fmt.Printf("\nfloat64Var: %.10f", float64Var)
 }
 
-func problem_two_fp () {
+func problem_two_fp() {
 	float32Var := float32(3.14)
 	float64Var := float64(3.14159265359)
 
@@ -37,10 +37,9 @@ func problem_three_fp() {
 	float32Var := float32(0.0)
 	float64Var := float64(0.0)
 
-
 	for i := 0; i < 10; i++ {
-		float32Var += 0.1 
-		float64Var += 0.1 
+		float32Var += 0.1
+		float64Var += 0.1
 	}
 
 	fmt.Printf("\nfloat32Var: %.10f", float32Var)
@@ -59,7 +58,7 @@ func problem_four_fp() {
 func problem_five_fp() {
 	const pie float64 = 3.14
 	var radius float64
-	
+
 	fmt.Println("Input radius: ")
 	fmt.Scan(&radius)
 

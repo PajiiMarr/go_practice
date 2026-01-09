@@ -3,9 +3,9 @@ package main
 import (
 	"fmt"
 	"math/cmplx"
-)	
+)
 
-func cn () {
+func cn() {
 	problem_one_cn()
 	problem_two_cn()
 	problem_three_cn()
@@ -13,7 +13,7 @@ func cn () {
 	problem_five_cn()
 }
 
-func problem_one_cn () {
+func problem_one_cn() {
 	variableOne := complex64(complex(3, 4))
 	variableTwo := complex(3, 4)
 
@@ -21,16 +21,15 @@ func problem_one_cn () {
 	fmt.Println("variableTwo: ", variableTwo)
 }
 
+func problem_two_cn() {
+	variableOne := complex(27, 4)
 
-func problem_two_cn () {
-	variableOne := complex(27,4)
-
-	fmt.Println("Real Part: ", real(variableOne), " Imaginary Part: " , imag(variableOne) )
+	fmt.Println("Real Part: ", real(variableOne), " Imaginary Part: ", imag(variableOne))
 }
 
 func problem_three_cn() {
-	variableOne := complex(4,5)
-	variableTwo := complex(6,7)
+	variableOne := complex(4, 5)
+	variableTwo := complex(6, 7)
 
 	sum := variableOne + variableTwo
 	difference := variableOne - variableTwo
@@ -44,7 +43,7 @@ func problem_three_cn() {
 }
 
 func problem_four_cn() {
-	variableOne := complex(3,4)
+	variableOne := complex(3, 4)
 
 	absoluteVariable := cmplx.Abs(variableOne)
 

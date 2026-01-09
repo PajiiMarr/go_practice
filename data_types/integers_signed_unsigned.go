@@ -1,11 +1,11 @@
 package main
 
 import (
-	"fmt"
 	"encoding/json"
+	"fmt"
 )
 
-func isu () {
+func isu() {
 	problem_one()
 	problem_two()
 	problem_three()
@@ -14,10 +14,10 @@ func isu () {
 
 }
 
-func problem_one () {
-	var int8_variable int8 = -128     // min value for int8
-	var uint8_variable uint8 = 255    // max value for uint8
-	var int16_variable int16 = 32767  // max value for int16
+func problem_one() {
+	var int8_variable int8 = -128      // min value for int8
+	var uint8_variable uint8 = 255     // max value for uint8
+	var int16_variable int16 = 32767   // max value for int16
 	var uint16_variable uint16 = 65535 // max value for uint16
 
 	fmt.Println("Int8 Variable:", int8_variable)
@@ -26,7 +26,7 @@ func problem_one () {
 	fmt.Println("UInt16 Variable:", uint16_variable)
 }
 
-func problem_two () {
+func problem_two() {
 	var variableOne int8
 
 	fmt.Print("\nInput a number (-127 to 127): ")
@@ -41,7 +41,7 @@ func problem_two () {
 	}
 }
 
-func problem_three () {
+func problem_three() {
 	var age uint8
 	var daysAlive int16
 
@@ -62,29 +62,28 @@ func problem_four() {
 	fmt.Println("Average Change per Reading: ", average)
 }
 
-
 type User struct {
-	UserId uint64
+	UserId         uint64
 	AccountBalance float64
-	LoginCount uint16
-	ErrorCode int8
+	LoginCount     uint16
+	ErrorCode      int8
 }
- 
+
 func problem_five() {
 	u1 := User{
-		UserId: 12345,
+		UserId:         12345,
 		AccountBalance: 43571.23,
-		LoginCount: 12,
-		ErrorCode: -123,
+		LoginCount:     12,
+		ErrorCode:      -123,
 	}
 
 	u2 := User{
-		UserId: 12346,
+		UserId:         12346,
 		AccountBalance: 23523.23,
-		LoginCount: 7,
-		ErrorCode: 127,
+		LoginCount:     7,
+		ErrorCode:      127,
 	}
-	
+
 	b, _ := json.MarshalIndent(u1, "", "  ")
 	fmt.Println(string(b))
 	a, _ := json.MarshalIndent(u2, "", "  ")
