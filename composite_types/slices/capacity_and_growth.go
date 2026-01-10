@@ -2,7 +2,7 @@ package main
 
 import "fmt"
 
-func cag () {
+func cag() {
 	// problemOneCag()
 	// problemTwoCag()
 	// problemThreeCag()
@@ -15,9 +15,9 @@ func problemOneCag() {
 
 	fmt.Println("Before Append: ")
 	fmt.Println("Length: ", len(variableOne), " Capacity: ", cap(variableOne))
-	
+
 	variableOne = append(variableOne, 1)
-	
+
 	fmt.Println("After Append: ")
 	fmt.Println("Length: ", len(variableOne), " Capacity: ", cap(variableOne))
 }
@@ -41,12 +41,12 @@ func problemThreeCag() {
 	for i := 0; i < 10; i++ {
 		variableOne = append(variableOne, 1)
 	}
-	
+
 	fmt.Println("After Append:")
 	fmt.Println("Length: ", len(variableOne), " Capacity: ", cap(variableOne))
 }
 
-func problemFourCag(){
+func problemFourCag() {
 	variableOne := []int{1, 2, 3, 4, 5, 6}
 
 	fmt.Println("Slice Length and Capacity")
@@ -59,8 +59,7 @@ func problemFourCag(){
 	fmt.Println(variableSubSlice)
 }
 
-
-func problemFiveCag(){
+func problemFiveCag() {
 	var nilVariable []int
 	preAllocated := make([]int, 3, 20)
 
