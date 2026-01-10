@@ -46,11 +46,6 @@ func problemFourMake () {
 	fmt.Println("Received value from channel: ", value)
 }
 
-// 5. Combined usage (Hard)
-// Use:
-// a slice to hold tasks,
-// a map to track task status,
-// a channel to signal task completion between goroutines.
 
 func problemFiveMake() {
 	sliceVariable := []string{"task1", "task2", "task3", "task4"}
