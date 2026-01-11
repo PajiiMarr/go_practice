@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: go-deployment
+spec: 
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-go-projects
+  template:
+    metadata:
+      labels:
+        app: my-go-projects
+    spec:
+      containers:
+        - name: my-go-projects
+          image: my-go-projects:latest
+          imagePullPolicy: IfNotPresent 
+          ports:
+            - containerPort: 8080
