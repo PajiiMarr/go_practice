@@ -1,24 +1,18 @@
-Basic Image Pull & Run – fetching images, starting containers
+1. Basic Image Pull & Run – fetching images, starting containers
 
 docker pull <image_name>
 
-
-
-Port Mapping & Volume Mounting – connecting host to container, persisting data
+2. Port Mapping & Volume Mounting – connecting host to container, persisting data
 
 docker run --rm -d --name <container_name> -p <host_port>:<container_port> -v /host/data:/container/data <image>:<tag>
 
-
-
-Multi-Container Networking – communication between multiple containers
+3. Multi-Container Networking – communication between multiple containers
 
 docker network create <network_name>
 docker run --rm -d --name <container_name1> --network <network_name> -e ENVIRONMENTAL_VARIABLE=value <image>:<tag>
 docker run --rm -d --name <container_name2> --network <network_name> -e ENVIRONMENTAL_VARIABLE=value <image>:<tag>
 
-
-
-Environment & Config Management – passing variables, secrets, configs
+4. Environment & Config Management – passing variables, secrets, configs
 
 docker run --rm -d --name <container_name> -e ENVIRONMENTAL_VARIABLE=value -e ENVIRONMENTAL_VARIABLE=value <image>:<tag>
 

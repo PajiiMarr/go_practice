@@ -1,0 +1,157 @@
+1 Container Isolation Basics (Easy)
+Focus: Namespaces (PID, MNT)
+Goal:
+Prove that a container believes it has its own system, even though it runs on your host.
+Use:
+nginx or httpd
+Hints:
+process list inside vs outside
+container PID ≠ host PID
+ephemeral filesystem
+ps, ls /, exit & re-run
+What you should observe:
+Processes and files don’t persist across runs.
+
+
+docker run -it --rm --name isolation-test nginx /bin/bash
+
+apt update
+apt install -y procps
+
+ps aux
+ps aux | grep nginx
+
+ls /
+echo "Hello isolation_test" > /testfile
+ls /
+
+exit
+
+
+2 Network Namespace Exploration (Easy–Medium)
+
+Focus: NET namespace
+Goal: Compare container networking in isolated vs shared network modes
+Use: nginx
+Hints:
+
+Default bridge network creates virtual interfaces
+
+Host network mode shares host interfaces
+
+Experiment with docker run -p 8080:80 vs --network host
+
+Use ip a, curl localhost:8080, or browser to test
+
+What to understand:
+
+How container networking is isolated
+
+Why port mapping is needed
+
+How host mode removes isolation
+
+docker run -d -p 8080:80 nginx
+
+docker network create text-nginx
+docker run -d --network text-nginx nginx 
+ifconfig
+docker ps
+curl http://localhost:8080
+
+
+
+🟠 3️⃣ Resource Limiting with cgroups (Medium)
+
+Focus: CPU and memory limits
+Goal: Restrict container CPU or memory usage and observe effects
+Use: my-go-projects or nginx
+Hints:
+
+--cpus for CPU limit
+
+--memory for RAM limit
+
+Stress container with CPU-heavy or memory-heavy command (like yes > /dev/null or head -c)
+
+Inspect limits with docker stats or docker inspect
+
+What to observe:
+
+CPU usage throttled according to --cpus
+
+Memory limit triggers container termination if exceeded
+
+
+docker run -it -d --rm  --name problem-3 --cpus="0.25" --memory="256m" nginx
+docker exec -it problem-3 bash
+yes > /dev/null  # CPU HEAVY test
+head -c 5g </dev/zero > /dev/null
+
+
+
+
+
+🔵 4️⃣ Union Filesystem / Layered Storage (Medium–Hard)
+
+Focus: Overlay/union filesystems
+Goal: Understand image layers and how changes are ephemeral in containers
+Use: nginx or mysql
+Hints:
+j
+Run container and modify/create files (touch /tmp/testfile)
+
+Exit and rerun same image → changes disappear
+
+Inspect image layers: docker image inspect <IMAGE>
+
+Compare docker diff <CONTAINER> to see changes in container layer
+
+What to observe:
+
+Base image is read-only
+
+Container writable layer stores changes
+
+Layered structure enables small image sizes and fast startup
+
+docker run -it --rm ---name interactive-terminal nginx /bin/bash
+docker diff interactive-terminal
+touch /tmp/tempfile
+touch /tmp/second-tempfile
+
+🟣 5️⃣ Multi-container Resource & Network Interaction (Hard)
+
+Focus: Namespaces + cgroups + networking combined
+Goal: Run multiple containers, limit resources, isolate network, and observe interactions
+Use: nginx, mysql, phpmyadmin
+Hints:
+
+Start mysql container with memory limit, expose port
+
+Start phpmyadmin container on same network
+
+Try connecting phpmyadmin → mysql
+
+Inspect each container’s PID, memory usage, network interfaces
+
+Optional: run nginx container on different network or CPU limit
+
+What to observe:
+
+Containers share host kernel but have isolated PID, network, and filesystem
+
+Resource limits enforced per container
+
+Network isolation controls connectivity
+
+
+docker run -d -p 3306:3306 --name mysql-container --network problem-5-net -e MYSQL_ROOT_PASSWORD=zamboanga047 --memory="256m" mysql
+docker logs mysql-container
+docker run -d --rm --name phpmyadmin-container -p 8080:80 --network problem-5-net -e PMA_HOST=mysql-container phpmyadmin
+docker inspect phpmyadmin-container
+docker inspect mysql-container
+docker stats
+docker network inspect problem-5-net
+docker network create nginx-net
+docker run -d --rm --name nginx-container --cpus="0.25" --network nginx-net nginx
