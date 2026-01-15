@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: go-deployment-two
+spec: 
+  replicas: 2
+  selector:
+    matchLabels:
+      app: my-go-projects
+  template:
+    metadata:
+      labels:
+        app: my-go-projects
+    spec:
+      containers:
+      - name: my-go-app
+        image: my-go-projects:latest
+        imagePullPolicy: IfNotPresent   # << important!
+        ports: 
+        - containerPort: 8080
+        resources: 
+          requests:
+            memory: "128Mi"
+            cpu: "256m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+

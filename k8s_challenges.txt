@@ -1,0 +1,383 @@
+🟢 1️⃣ Pod Basics (Very Easy)
+
+Focus: Pods, containers
+
+Goal:
+Run a single Pod with your Go container
+Verify it starts successfully
+
+Hints:
+
+kind: Pod
+containerPort
+kubectl logs
+
+kubectl apply -f go-pod.yaml
+kubectl get pods
+kubectl logs go-pod
+kubectl delete pod go-pod
+kubectl get pods
+
+
+
+🟢 2️⃣ Deploymen🟢 1️⃣ Pod Basics (Very Easy)
+
+Focus: Pods, containers
+
+Goal:
+
+Run a single Pod with your Go container
+
+Verify it starts successfully
+
+Hints:
+
+kind: Pod
+
+containerPort
+
+kubectl logs
+
+🟢 2️⃣ Deployment Fundamentals (Easy)
+
+Focus: Deployments, replicas
+
+Goal:
+
+Convert your Pod into a Deployment
+
+Run 2 replicas
+
+Hints:
+replicas
+matchLabels
+
+Delete a pod manually and observe behavior
+
+
+kubectl apply -f go-deployment-two.yaml
+kubectl get pods
+kubectl delete pod go-deployment-two-6c6b986878-fcpm6
+kubectl get pods
+
+
+
+
+🟢 3️⃣ Self-Healing Behavior (Easy)
+
+Focus: Controllers
+
+Goal:
+
+Kill a pod
+Watch Kubernetes recreate it automatically
+
+Hints:
+
+kubectl delete pod
+kubectl get pods -w
+
+
+kubectl delete pod go-deployment-two-6c6b986878-fmzv2  
+kubectl get pods -w
+
+
+🟢 4️⃣ Resource Requests & Limits (Easy–Medium)
+
+Focus: Resource management
+
+Goal:
+
+Add CPU & memory requests and limits
+Verify they appear in pod description
+
+Hints:
+
+resources.requests
+resources.limits
+
+kubectl describe pod
+
+resources:
+    requests:
+        memory: "128Mi"
+        cpu: "256m"
+    limits:
+        memory: "128Mi"
+        cpu: "500m"
+
+kubectl describe go-deployment-two-6c6b986878-tfpmr
+
+Containers:
+  my-go-app:
+    Container ID:   docker://4cfb2f7af9461f0ebee4ade1075e75cf18d5aa804a2c6c7b861addfdcd72ab14
+    Image:          my-go-projects:latest
+    Image ID:       docker://sha256:ebed48ac76abfb19b5b4cafb4324bb05225ebd2b356c0dcffb5e6bc600fe0958
+    Port:           8080/TCP
+    Host Port:      0/TCP
+    State:          Waiting
+      Reason:       CrashLoopBackOff
+    Last State:     Terminated
+      Reason:       Completed
+      Exit Code:    0
+      Started:      Thu, 15 Jan 2026 21:32:04 +0800
+      Finished:     Thu, 15 Jan 2026 21:32:04 +0800
+    Ready:          False
+    Restart Count:  7
+    Limits:
+      cpu:     500m
+      memory:  128Mi
+    Requests:
+      cpu:        256m
+      memory:     128Mi
+    Environment:  <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-9nn6t (ro)
+
+
+🟡 5️⃣ Expose with a Service (Medium)
+
+Focus: Networking basics
+
+Goal:
+
+Expose your Deployment internally
+Access it locally
+
+Hints:
+
+Service
+ClusterIP
+Label selectors
+
+kubectl expose deployment nginx-deployment \
+--type=ClusterIP \
+--name=nginx-service \
+--port=80 \
+--target-port=80
+kubectl get svc
+kubectl describe svc nginx-service
+
+🟡 6️⃣ NodePort Access (Medium)
+
+Focus: External access
+
+Goal:
+
+Make your app reachable from your browser
+
+Hints:
+
+NodePort
+
+kubectl get svc
+
+localhost:<nodePort>
+
+kubectl get svc 
+curl http://localhost:30080
+
+
+
+🟡 7️⃣ ConfigMap via Environment Variables (Medium)
+
+Focus: Configuration
+
+Goal:
+
+Inject configuration into nginx or phpMyAdmin
+
+Read it at runtime (e.g., server_name for nginx, database credentials for phpMyAdmin)
+
+Hints:
+
+Create a ConfigMap with key-value pairs
+
+Use envFrom in your Deployment YAML
+
+Restart pods to see changes take effect
+
+Example variables:
+
+NGINX_HOST
+
+PMA_HOST
+
+in spec.template.spec.containers.envFrom
+
+envFrom: 
+    - configMapRef:
+        name: nginx-configmap
+    - secretRef:
+        name: nginx-secret
+
+kubectl apply -f nginx-secret.yaml
+kubectl apply -f nginx-configmap.yaml
+kubectl get pods 
+kubectl get svc
+kubectl get serets 
+kubectl get configmaps 
+
+
+🟡 8️⃣ ConfigMap as a File (Medium–Hard)
+
+Focus: Volume mounts
+
+Goal:
+
+Mount a configuration file into nginx (nginx.conf) or phpMyAdmin (config.inc.php)
+
+Observe the container reading it from disk
+
+Hints:
+
+volumes + volumeMounts
+
+Use kubectl exec <pod> -- cat /path/to/config
+
+kubectl exec nginx-deployment-8568495446-vkrfl -- cat /etc/nginx/nginx.conf
+volumeMounts:
+    - name: nginx-config-volume
+        mountPath: /etc/nginx/nginx.conf
+        subPath: nginx.conf
+
+volumes:
+        - name: nginx-config-volume
+          configMap:
+            name: nginx-configmap
+            items:
+              - key: nginx.conf
+                path: nginx.conf
+
+kubectl apply -f nginx-deployment.yaml
+kubectl describe pod nginx-deployment-fb8f8d6cc-8ldc6
+
+
+
+
+
+Modify ConfigMap → kubectl rollout restart to update pods
+
+🟠 9️⃣ Secrets (Medium–Hard)
+
+Focus: Secure configuration
+
+Goal:
+
+Store sensitive data for MySQL (password, root password)
+
+Inject securely into mysql or phpMyAdmin pods
+
+Hints:
+
+kind: Secret
+
+Base64 encode your values
+
+Consume via:
+
+env: for mysql password
+
+Mounted file for phpMyAdmin config
+
+🟠 1️⃣0️⃣ Health Probes (Hard)
+
+Focus: Reliability
+
+Goal:
+
+Add liveness & readiness probes for nginx or mysql
+
+Observe pod restarts or traffic blocking
+
+Hints:
+
+Nginx: / with httpGet probe
+
+MySQL: TCP port 3306 probe
+
+Use livenessProbe + readinessProbe fields
+
+🟠 1️⃣1️⃣ Rolling Updates (Hard)
+
+Focus: Zero downtime
+
+Goal:
+
+Deploy a new version of nginx, MySQL, or phpMyAdmin
+
+Observe rolling update behavior
+
+Hints:
+
+strategy: RollingUpdate
+
+maxUnavailable / maxSurge
+
+kubectl rollout status deployment <name>
+
+🔴 1️⃣2️⃣ Persistent Storage (Hard)
+
+Focus: Stateful workloads
+
+Goal:
+
+Persist MySQL data across pod restarts
+
+Ensure phpMyAdmin can still connect
+
+Hints:
+
+Use PersistentVolumeClaim + volumeMounts
+
+Delete pod → data persists
+
+Optionally test with emptyDir (temporary) first
+
+🔴 1️⃣3️⃣ Scaling Under Load (Very Hard)
+
+Focus: Capacity & scaling
+
+Goal:
+
+Scale nginx or phpMyAdmin replicas
+
+Observe CPU/memory usage and network behavior
+
+Hints:
+
+kubectl scale deployment <name> --replicas=N
+
+kubectl top pods
+
+Set resource requests/limits for realistic scaling
+
+🔴 1️⃣4️⃣ Full App Lifecycle (Expert)
+
+Focus: Integration of everything
+
+Goal:
+
+Run a full stack:
+
+Deployment: MySQL + phpMyAdmin + optional nginx front
+
+Services for each
+
+ConfigMaps + Secrets
+
+Resource limits
+
+Liveness/readiness probes
+
+Rolling updates
+
+Observe pod failures & recovery
+
+Hints:
+
+Label consistency across Deployments/Services
+
+Minimal YAML duplication (reuse ConfigMaps/Secrets)
+
+Delete a pod → ensure recovery and data persistence
