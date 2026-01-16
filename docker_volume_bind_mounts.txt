@@ -1,0 +1,200 @@
+🟢 1️⃣ MySQL Data Persistence (Easy)
+
+Goal
+
+Run a MySQL container
+Store database data in a Docker volume
+Remove the container
+Recreate it and verify data is still there
+Rules
+
+Use mysql:latest
+Use exactly one volume
+Use default MySQL data directory
+
+Hints
+
+docker volume create
+-v volume_name:/var/lib/mysql
+MYSQL_ROOT_PASSWORD
+SHOW DATABASES;
+
+
+docker run -d --name mysql-vol-1 -v mysql-vol:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=root mysql
+docker exec -it mysql-vol-1 mysql -uroot -proot
+create database practice_databases;
+docker stop mysql-vol-1
+docker rm mysql-vol-1
+docker run -d --name mysql-vol-1 -v mysql-vol:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=root mysql
+docker exec -it mysql-vol-1 mysql -uroot -proot
+show databases;
+
+
+
+
+
+🟡 2️⃣ Shared Volume Between Containers (Medium)
+
+Goal
+
+Two MySQL containers
+Both containers use the same Docker volume
+Verify they see the same database
+Rules
+
+Use mysql:latest for both
+Containers must have different names
+Volume must be created once
+
+Hints
+
+MySQL data dir stays the same
+Stop one container and start the other
+Think about data locking
+
+docker run -d --name mysql-vol-1 -v mysql-vol:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=root mysql:latest
+docker exec -it mysql-vol-1 mysql -uroot -proot
+create database vol_1;
+exit;
+docker stop mysql-vol-1
+docker run -d --name mysql-vol-2 -v mysql-vol:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=root mysql:latest
+docker exec -it mysql-vol-2 mysql -uroot -proot
+show databases;
+
+🔴 3️⃣ Volume Recovery Simulation (Hard)
+
+Goal
+
+Run MySQL with a volume
+
+Insert data
+Remove container
+Accidentally start MySQL without the volume
+Fix it and recover the data
+
+Rules
+
+Use mysql:oraclelinux9
+
+Do NOT recreate the volume
+Final container must show original data
+
+Hints
+
+Container ≠ volume
+docker inspect
+Mount path matters
+
+docker run -d \
+--name mysql-recov \
+-v mysql-vol:/var/lib/mysql \
+-e MYSQL_ROOT_PASSWORD=root \
+mysql:oraclelinux9
+docker exec -it mysql-recov mysql -uroot -proot
+create database database_recov;
+exit;
+docker stop mysql-recov
+docker rm mysql-recov
+docker run -d \
+--name mysql-recov \
+-e MYSQL_ROOT_PASSWORD=root \
+mysql:oraclelinux9
+docker exec -it mysql-recov mysql -p
+show databases;
+exit;
+docker inspect mysql-recov
+docker stop mysql-recov
+docker rm mysql-recov
+docker run -d \
+  --name mysql-recov \
+  -v mysql-vol:/var/lib/mysql \
+  -e MYSQL_ROOT_PASSWORD=root \
+  mysql:oraclelinux9
+docker exec -it mysql-recov mysql -uroot -proot
+show databases;
+exit
+
+
+🔵 BIND MOUNT PROBLEMS (Host-managed storage)
+🟢 4️⃣ Host-Controlled MySQL Data (Easy)
+
+Goal
+
+Store MySQL data in a host directory
+
+Stop and remove container
+
+Verify data still exists on the host
+
+Rules
+
+Use mysql:latest
+
+Host directory must be under:
+
+~/go_projects/mysql-data
+
+
+Hints
+
+Absolute paths only
+
+/var/lib/mysql
+
+ls on host after container removal
+
+🟡 5️⃣ Permission & Ownership Issue (Medium)
+
+Goal
+
+Bind mount a host directory
+
+MySQL fails to start
+
+Fix permissions so MySQL starts successfully
+
+Rules
+
+Use mysql:9.5
+
+You must NOT change the image
+
+Fix must be on the host side
+
+Hints
+
+docker logs
+
+ls -l
+
+UID/GID
+
+chown
+
+🔴 6️⃣ Dangerous Bind Mount Scenario (Hard)
+
+Goal
+
+Bind mount a host directory
+
+Accidentally overwrite MySQL data
+
+Diagnose why data disappeared
+
+Explain why volumes are safer than bind mounts
+
+Rules
+
+Use mysql:latest
+
+Use an empty host directory
+
+Must destroy data at least once
+
+Hints
+
+Host folder content overrides container FS
+
+Mount order matters
+
+Compare behavior with a volume

@@ -14,17 +14,13 @@ Processes and files don’t persist across runs.
 
 
 docker run -it --rm --name isolation-test nginx /bin/bash
-
 apt update
 apt install -y procps
-
 ps aux
 ps aux | grep nginx
-
 ls /
 echo "Hello isolation_test" > /testfile
 ls /
-
 exit
 
 
