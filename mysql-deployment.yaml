@@ -35,3 +35,13 @@ spec:
                 key: MYSQL_ROOT_PASSWORD
         ports:
         - containerPort: 3306
+        livenessProbe: 
+          tcpSocket: 
+            port: 3306
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          tcpSocket: 
+            port: 3306
+          initialDelaySeconds: 10
+          periodSeconds: 5

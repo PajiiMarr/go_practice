@@ -310,16 +310,26 @@ Focus: Reliability
 Goal:
 
 Add liveness & readiness probes for nginx or mysql
-
 Observe pod restarts or traffic blocking
 
 Hints:
 
 Nginx: / with httpGet probe
-
 MySQL: TCP port 3306 probe
-
 Use livenessProbe + readinessProbe fields
+
+livenessProbe: 
+  tcpSocket: 
+    port: 3306
+  initialDelaySeconds: 30
+  periodSeconds: 10
+readinessProbe:
+  tcpSocket: 
+    port: 3306
+  initialDelaySeconds: 10
+  periodSeconds: 5
+kubectl apply -f mysql-deployment.yaml
+
 
 🟠 1️⃣1️⃣ Rolling Updates (Hard)
 
