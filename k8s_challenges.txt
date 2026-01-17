@@ -338,16 +338,33 @@ Focus: Zero downtime
 Goal:
 
 Deploy a new version of nginx, MySQL, or phpMyAdmin
-
 Observe rolling update behavior
 
 Hints:
 
 strategy: RollingUpdate
-
 maxUnavailable / maxSurge
-
 kubectl rollout status deployment <name>
+
+strategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxUnavailable: 2
+    maxSurge: 1
+
+kubectl rollout restart deployment mysql-deployment
+kubectl rollout status deployment mysql-deployment
+
+mar@PajiiMarr-M3 ~/go_projects/composite_types/maps kubectl rollout restart deployment mysql-deployment
+deployment.apps/mysql-deployment restarted
+mar@PajiiMarr-M3 ~/go_projects/composite_types/maps kubectl rollout status deployment mysql-deployment
+Waiting for deployment "mysql-deployment" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "mysql-deployment" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "mysql-deployment" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "mysql-deployment" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "mysql-deployment" rollout to finish: 1 old replicas are pending termination...
+deployment "mysql-deployment" successfully rolled out
+mar@PajiiMarr-M3 ~/go_projects/composite_types/maps 
 
 🔴 1️⃣2️⃣ Persistent Storage (Hard)
 
