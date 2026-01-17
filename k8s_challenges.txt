@@ -263,22 +263,45 @@ Modify ConfigMap → kubectl rollout restart to update pods
 Focus: Secure configuration
 
 Goal:
-
 Store sensitive data for MySQL (password, root password)
-
 Inject securely into mysql or phpMyAdmin pods
 
 Hints:
 
 kind: Secret
-
 Base64 encode your values
-
 Consume via:
-
 env: for mysql password
-
 Mounted file for phpMyAdmin config
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mysql-secret
+type: Opaque
+data:
+  password: emFtYm9hbmdhMDQ3
+  root-password: emFtYm9hbmdhMDQ3
+
+kubectl apply -f mysql-secret.yaml
+
+mysql-deployment.yaml
+
+env: 
+  - name: MYSQL_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: mysql-secret
+        key: MYSQL_PASSWORD
+  - name: MYSQL_ROOT_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: mysql-secret
+        key: MYSQL_ROOT_PASSWORD
+
+kubectl apply -f mysql-deployment.yaml
+kubectl describe secret mysql-secret
+
 
 🟠 1️⃣0️⃣ Health Probes (Hard)
 
