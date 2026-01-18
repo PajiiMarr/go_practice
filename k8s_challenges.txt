@@ -25,17 +25,13 @@ kubectl get pods
 Focus: Pods, containers
 
 Goal:
-
 Run a single Pod with your Go container
-
 Verify it starts successfully
 
 Hints:
 
 kind: Pod
-
 containerPort
-
 kubectl logs
 
 🟢 2️⃣ Deployment Fundamentals (Easy)
@@ -169,9 +165,7 @@ Make your app reachable from your browser
 Hints:
 
 NodePort
-
 kubectl get svc
-
 localhost:<nodePort>
 
 kubectl get svc 
@@ -186,30 +180,25 @@ Focus: Configuration
 Goal:
 
 Inject configuration into nginx or phpMyAdmin
-
 Read it at runtime (e.g., server_name for nginx, database credentials for phpMyAdmin)
 
 Hints:
 
 Create a ConfigMap with key-value pairs
-
 Use envFrom in your Deployment YAML
-
 Restart pods to see changes take effect
-
 Example variables:
 
 NGINX_HOST
-
 PMA_HOST
 
 in spec.template.spec.containers.envFrom
 
 envFrom: 
-    - configMapRef:
-        name: nginx-configmap
-    - secretRef:
-        name: nginx-secret
+  - configMapRef:
+      name: nginx-configmap
+  - secretRef:
+      name: nginx-secret
 
 kubectl apply -f nginx-secret.yaml
 kubectl apply -f nginx-configmap.yaml
@@ -237,17 +226,17 @@ Use kubectl exec <pod> -- cat /path/to/config
 
 kubectl exec nginx-deployment-8568495446-vkrfl -- cat /etc/nginx/nginx.conf
 volumeMounts:
-    - name: nginx-config-volume
-        mountPath: /etc/nginx/nginx.conf
-        subPath: nginx.conf
+  - name: nginx-config-volume
+      mountPath: /etc/nginx/nginx.conf
+      subPath: nginx.conf
 
 volumes:
-        - name: nginx-config-volume
-          configMap:
-            name: nginx-configmap
-            items:
-              - key: nginx.conf
-                path: nginx.conf
+  - name: nginx-config-volume
+    configMap:
+      name: nginx-configmap
+      items:
+        - key: nginx.conf
+          path: nginx.conf
 
 kubectl apply -f nginx-deployment.yaml
 kubectl describe pod nginx-deployment-fb8f8d6cc-8ldc6
@@ -373,16 +362,39 @@ Focus: Stateful workloads
 Goal:
 
 Persist MySQL data across pod restarts
-
 Ensure phpMyAdmin can still connect
 
 Hints:
 
 Use PersistentVolumeClaim + volumeMounts
-
 Delete pod → data persists
-
 Optionally test with emptyDir (temporary) first
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  volumeMode: Filesystem
+  storageClassName: standard
+
+kubectl apply -f mysql-pvc.yaml
+
+        volumeMounts:
+          - name: mysql-pvc
+            mountPath: /var/lib/mysql
+      volumes:
+        - name: mysql-pvc
+          persistentVolumeClaim:
+            claimName: mysql-pvc
+kubectl apply -f mysql-deployment.yaml
+
+
 
 🔴 1️⃣3️⃣ Scaling Under Load (Very Hard)
 

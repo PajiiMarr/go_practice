@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: mysql-deployment
 spec:
-  replicas: 2
+  replicas: 1
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -50,3 +50,10 @@ spec:
             port: 3306
           initialDelaySeconds: 10
           periodSeconds: 5
+        volumeMounts:
+          - name: mysql-pvc
+            mountPath: /var/lib/mysql
+      volumes:
+        - name: mysql-pvc
+          persistentVolumeClaim:
+            claimName: mysql-pvc
