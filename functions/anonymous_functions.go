@@ -26,7 +26,7 @@ func problemOneAf() {
 	double_num := num(2)
 
 	fmt.Println("Double number", double_num)
-}
+}	
 
 // Challenge 2 (Medium)
 // Pass anonymous function as argument to another function
