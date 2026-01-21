@@ -5,5 +5,6 @@ func main () {
 	// mrv() // multiple_return_values.go
 	// af()
 	// c()
-	nr() // named_returns.go
+	// nr() // named_returns.go
+	cbv() // call_by_value.go
 }
