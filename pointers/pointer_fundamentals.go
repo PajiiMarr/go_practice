@@ -4,7 +4,8 @@ import "fmt"
 
 func pf() {
 	// problemOnePf()
-	problemTwoPf()
+	// problemTwoPf()
+	problemThreePf()
 }
 
 // 🟢 EASY — Pointer Fundamentals
@@ -78,3 +79,33 @@ func problemTwoPf() {
 // Modify fields directly
 
 // No struct copying
+
+type User struct {
+	Name string 
+	Age int
+}
+
+func DefaultUser() User {
+	return User{
+		Name: "Marlo",
+		Age: 19,
+	}
+}
+
+func resetStructPointer(u *User){
+	*u = DefaultUser()
+}
+
+func problemThreePf() {
+	user := User{
+		Name: "Maria",
+		Age: 19,
+	}
+
+	fmt.Println("Before reset: ")
+	fmt.Println(user)
+
+	fmt.Println("After Reset: ")
+	resetStructPointer(&user)
+	fmt.Println(user)
+}
